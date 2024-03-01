@@ -8,6 +8,10 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 
+app.get('/', function (req, res) {
+  res.render('home');
+});
+
 app.listen(port, () => {
   console.info(`http://localhost:${port}`)
 })
