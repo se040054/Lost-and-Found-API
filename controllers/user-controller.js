@@ -1,13 +1,13 @@
 const userService = require('../services/user-service')
 
 const userController = {
-  register: (req, res) => {
+  register: (req, res,next) => {
     const { account, password, confirmPassword, name } = req.body
-    if (!account || !password || !confirmPassword || !name) return res.status(400).json({ status: 'error', message: '帳號、密碼、確認密碼、名稱不能為空' }) // res.send後要加return 否則程式會繼續往下運行
-    if (confirmPassword !== password) return res.status(400).json({ status: 'error', message: '密碼不一致' })
-    userService.register(req, (err,data) => {
-      if (err) return res.status(400).json({ status: 'error', message: err.message })
-      else return res.json({ data })
+    if (!account || !password || !confirmPassword || !name) throw new Error('帳號、密碼、確認密碼、名稱不能為空')
+    if (confirmPassword !== password) throw new Error('密碼不一致')
+    userService.register(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
     })
   }
 }
