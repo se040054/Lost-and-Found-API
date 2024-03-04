@@ -12,4 +12,5 @@ router.get('/', (req, res) => {
 router.use(users)
 router.use(home)
 router.use(errorHandler)
+
 module.exports = router
