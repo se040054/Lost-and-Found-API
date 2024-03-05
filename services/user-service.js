@@ -20,6 +20,15 @@ const userService = {
       )
       .catch(err => cb(err))
   },
+  getUser: (req, cb) => {
+    return User.findByPk(req.params.id, {
+      attributes: { exclude: ['password'] }
+    }).then(user => {
+      if (!user) throw new Error('此用戶不存在')
+      return cb(null, user)
+    })
+      .catch(err => cb(err))
+  }
 
 }
 

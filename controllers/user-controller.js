@@ -29,6 +29,12 @@ const userController = {
       next(err)
     }
   },
+  getUser: (req, res, next) => {
+    userService.getUser(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
+  }
 
 }
 
