@@ -34,6 +34,17 @@ const userController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  putUser: (req, res, next) => {
+    if (req.user.id !== Number(req.params.id)) throw new Error('僅能修改當前登入使用者')
+    if (req.body.phone) {
+      const phone = Number(req.body.phone)
+      if (!Number.isFinite(phone) || !Number.isInteger(phone) || req.body.phone.length !== 10) throw new Error('行動電話必須為10位整數')
+    }
+    userService.putUser(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 
 }

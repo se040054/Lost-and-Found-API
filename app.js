@@ -1,12 +1,8 @@
 const express = require('express')
-const { engine } = require('express-handlebars')
 const app = express()
 const port = 3000
 
-app.engine('.hbs', engine({ extname: '.hbs' }))
-app.set('view engine', '.hbs')
-app.set('views', './views')
-app.use(express.static('public'))
+app.use(express.static('public')) // public視為根目錄 不需要在路由path當中寫入public
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
