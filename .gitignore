@@ -2,5 +2,6 @@
 
 .env
 
-/publice/images
-/publice/temp
+public/images/
+
+public/temp/
