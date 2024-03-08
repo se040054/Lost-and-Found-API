@@ -18,6 +18,7 @@ const merchantService = {
       return cb(null, newMerchant)
     }
     catch (err) {
+      console.log(err)
       return cb(err)
     }
   },
@@ -28,6 +29,25 @@ const merchantService = {
         return cb(null, merchant)
       })
       .catch(err => cb(err))
+  },
+  putMerchant: async (req, cb) => {
+    try {
+      const merchant = await Merchant.findByPk(req.params.id)
+      if (!merchant) throw new Error('找不到此商家')
+      if (merchant.userId !== req.user.id) throw new Error('僅能修改自己的商家')
+      console.log(merchant)
+      const logo = req.file ? await fileHelper.fileToJpeg(req.file) : null
+      await merchant.update({
+        name: req.body.name || merchant.name,
+        logo: logo || merchant.logo,
+        address: req.body.address || merchant.address
+      })
+      await merchant.save()
+      return cb(null, merchant.toJSON())
+    } catch (err) {
+      console.log(err)
+      return cb(err)
+    }
   }
 }
 

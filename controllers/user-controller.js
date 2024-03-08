@@ -36,6 +36,8 @@ const userController = {
     })
   },
   putUser: (req, res, next) => {
+    const { name, email, phone, avatar, county } = req.body
+    if (!name && !email && !phone && !avatar && !county && !req.file) throw new Error('未修改任何資料')
     if (req.user.id !== Number(req.params.id)) throw new Error('僅能修改當前登入使用者')
     if (req.body.phone) {
       const phone = Number(req.body.phone)

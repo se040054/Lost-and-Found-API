@@ -34,14 +34,13 @@ const userService = {
     try {
       let user = await User.findByPk(req.params.id)
       const avatar = req.file ? await fileHelper.fileToJpeg(req.file) : null
-      const { name, email, phone, county } = req.body
       if (!user) throw new Error('使用者不存在!')
       await user.update({
-        name: name || user.name,
+        name: req.body.name || user.name,
         avatar: avatar || user.avatar,
-        email: email || user.email,
-        phone: phone || user.phone,
-        county: county || user.county
+        email: req.body.email || user.email,
+        phone: req.body.phone || user.phone,
+        county: req.body.county || user.county
       })
       await user.save()
       user = user.toJSON()
