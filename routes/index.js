@@ -1,13 +1,18 @@
 const express = require('express')
 const router = express.Router()
+
+const home = require('./home')
 const users = require('./users')
 const merchants =require('./merchants')
-const home = require('./home')
+const items = require('./items')
+
 const { errorHandler } = require('../middleware/error-handler')
 
+router.use(home)
 router.use(users)
 router.use(merchants)
-router.use(home)
+router.use(items)
+
 router.use(errorHandler)
 
 module.exports = router

@@ -28,7 +28,14 @@ const merchantController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
-  }
+  },
+  getMerchants:(req,res,next)=>{
+    merchantService.getMerchants(req,(err,apiData)=>{
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
+    }
+  
 
 }
 

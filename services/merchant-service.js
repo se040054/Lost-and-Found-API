@@ -35,7 +35,6 @@ const merchantService = {
       const merchant = await Merchant.findByPk(req.params.id)
       if (!merchant) throw new Error('找不到此商家')
       if (merchant.userId !== req.user.id) throw new Error('僅能修改自己的商家')
-      console.log(merchant)
       const logo = req.file ? await fileHelper.fileToJpeg(req.file) : null
       await merchant.update({
         name: req.body.name || merchant.name,
@@ -48,6 +47,14 @@ const merchantService = {
       console.log(err)
       return cb(err)
     }
+  },
+  getMerchants: (req, cb) => {
+    return Merchant.findAll({ raw: true })
+      .then(merchants => {
+        if (!merchants) return cb(null, '尚未有商家資訊')
+        else return cb(null, merchants)
+      })
+      .catch(err => cb(err))
   }
 }
 
