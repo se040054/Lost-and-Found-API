@@ -33,7 +33,7 @@ const userService = {
   putUser: async (req, cb) => {
     try {
       let user = await User.findByPk(req.params.id)
-      const avatar = req.file ? await fileHelper.fileToJpeg(req.file) : null
+      const avatar = req.file ? await fileHelper.fileToJpegUser(req.file) : null
       if (!user) throw new Error('使用者不存在!')
       await user.update({
         name: req.body.name || user.name,

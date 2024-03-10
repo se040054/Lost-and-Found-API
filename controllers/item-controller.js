@@ -8,6 +8,15 @@ const itemController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  putItem: (req, res, next) => {
+    console.log(req.params.id)
+    const { name, description, place, findDate, category, } = req.body
+    if (!name && !description && !place && !findDate && !req.file && !category) throw new Error('未修改任何資訊')
+    itemService.putItem(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 }
 module.exports = itemController
