@@ -6,4 +6,5 @@ const upload = require('../middleware/multer')
 
 router.post('/items', authenticated, upload.single('photo'), itemController.postItem)
 router.put('/items/:id', authenticated, upload.single('photo'), itemController.putItem)
+router.delete('/items/:id',authenticated,itemController.deleteItem)
 module.exports = router 

@@ -17,6 +17,12 @@ const itemController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  deleteItem: (req, res, next) => {
+    itemService.deleteItem(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 }
 module.exports = itemController
