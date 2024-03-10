@@ -23,6 +23,12 @@ const itemController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  getItem:(req,res,next)=>{
+    itemService.getItem(req,(err,apiData)=>{
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 }
 module.exports = itemController

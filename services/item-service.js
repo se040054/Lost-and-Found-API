@@ -56,6 +56,19 @@ const itemService = {
       }
       ).then(deleteItem => cb(null, deleteItem))
       .catch(err => cb(err))
+  },
+  getItem: (req, cb) => {
+    return Item.findByPk(req.params.id, {
+      include: [
+        { model: User },
+        { model: Merchant }
+      ]
+    })
+      .then(item => {
+        if (!item) throw new Error('找不到此物品')
+        return cb(null, item)
+      })
+      .catch(err => cb(err))
   }
 }
 module.exports = itemService
