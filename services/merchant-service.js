@@ -1,4 +1,4 @@
-const { Merchant, User } = require('../models')
+const { Merchant, User, Item } = require('../models')
 const fileHelper = require('../helpers/file-helper')
 
 const merchantService = {
@@ -23,7 +23,12 @@ const merchantService = {
     }
   },
   getMerchant: (req, cb) => {
-    return Merchant.findByPk(req.params.id, { raw: true })
+    return Merchant.findByPk(req.params.id, {
+      include: [
+        { model: Item },
+        { model: User }]
+    },
+      { raw: true })
       .then(merchant => {
         if (!merchant) throw new Error('找不到此商家')
         return cb(null, merchant)

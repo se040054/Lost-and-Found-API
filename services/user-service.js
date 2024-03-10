@@ -1,4 +1,4 @@
-const { User } = require('.././models')
+const { User, Merchant, Item } = require('.././models')
 const bcrypt = require('bcryptjs')
 const fileHelper = require('../helpers/file-helper')
 const userService = {
@@ -23,8 +23,13 @@ const userService = {
   },
   getUser: (req, cb) => {
     return User.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] }
-    }).then(user => {
+      attributes: { exclude: ['password'] },
+      include: [
+        { model: Merchant },
+        { model: Item }
+      ]
+    }
+    ).then(user => {
       if (!user) throw new Error('此用戶不存在')
       return cb(null, user)
     })

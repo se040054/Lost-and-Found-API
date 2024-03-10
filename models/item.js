@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Item.belongsTo(models.Category, { foreignKey: 'categoryId' })
+      Item.belongsTo(models.User, { foreignKey: 'userId' })
+      Item.belongsTo(models.Merchant, { foreignKey: 'merchantId' })
     }
   }
   Item.init({
@@ -27,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Item',
-    tableName:'Items',
+    tableName: 'Items',
     underscored: true,
   });
   return Item;
