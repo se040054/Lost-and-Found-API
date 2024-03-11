@@ -5,7 +5,7 @@ const categoryService = {
       .then(categories => cb(null, categories))
       .catch(err => cb(err))
   },
-  postCategories: (req, cb) => {
+  postCategory: (req, cb) => {
     return Category.findOne({ where: { name: req.body.name } })
       .then(repeatCategory => {
         if (repeatCategory) throw new Error('相同分類已存在')
@@ -13,6 +13,21 @@ const categoryService = {
       })
       .then(newCategory => cb(null, newCategory))
       .catch(err => cb(err))
+  },
+  putCategory: async (req, cb) => {
+    try {
+      const category = await Category.findByPk(req.params.id)
+      if (!category) throw new Error('找不到此分類')
+      if (category.toJSON().name === req.body.name) throw new Error('修改的名稱與目前名稱相同')
+      await category.update({ name: req.body.name })
+      await category.save()
+      return cb(null, category)
+    } catch (err) {
+      console.log(err)
+      return cb(err)
+    }
+
+
   }
 }
 
