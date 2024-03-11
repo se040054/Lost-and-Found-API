@@ -26,8 +26,15 @@ const categoryService = {
       console.log(err)
       return cb(err)
     }
-
-
+  },
+  deleteCategory: (req, cb) => {
+    return Category.findByPk(req.params.id)
+      .then(category => {
+        if (!category) throw new Error('找不到此分類')
+        return category.destroy()
+      })
+      .then(deletedCategory => cb(null, deletedCategory))
+      .catch(err => cb(err))
   }
 }
 

@@ -53,8 +53,8 @@ const itemService = {
         if (!item) throw new Error('找不到此物品')
         if (item.userId !== req.user.id) throw new Error('無法刪除他人刊登的物品')
         return item.destroy()
-      }
-      ).then(deleteItem => cb(null, deleteItem))
+      })
+      .then(deleteItem => cb(null, deleteItem))
       .catch(err => cb(err))
   },
   getItem: (req, cb) => {
