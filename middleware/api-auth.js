@@ -12,7 +12,7 @@ const authenticated = (req, res, next) => {
 
 const authenticatedAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) return next()
-  return res.status(403).json({ status: 'error', message: '無權訪問' })
+  return res.status(403).json({ status: 'error', message: '非管理員身分' })
 }
 
 
