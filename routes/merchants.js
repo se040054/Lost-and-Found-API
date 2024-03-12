@@ -8,5 +8,6 @@ router.post('/merchants', authenticated, upload.single('logo'), merchantControll
 router.get('/merchants', merchantController.getMerchants)
 router.get('/merchants/:id', merchantController.getMerchant)
 router.put('/merchants/:id', authenticated, upload.single('logo'), merchantController.putMerchant)
+router.delete('/merchants/:id',authenticated,merchantController.deleteMerchant)
 
 module.exports = router

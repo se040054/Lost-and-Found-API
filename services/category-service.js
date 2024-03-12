@@ -18,7 +18,7 @@ const categoryService = {
     try {
       const category = await Category.findByPk(req.params.id)
       if (!category) throw new Error('找不到此分類')
-      if (category.toJSON().name === req.body.name) throw new Error('修改的名稱與目前名稱相同')
+      if (category.name === req.body.name) throw new Error('修改的名稱與目前名稱相同')
       await category.update({ name: req.body.name })
       await category.save()
       return cb(null, category)

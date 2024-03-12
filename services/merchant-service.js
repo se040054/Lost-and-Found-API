@@ -44,10 +44,11 @@ const merchantService = {
       await merchant.update({
         name: req.body.name || merchant.name,
         logo: logo || merchant.logo,
-        address: req.body.address || merchant.address
+        address: req.body.address || merchant.address,
+        phone: req.body.phone || merchant.phone
       })
       await merchant.save()
-      return cb(null, merchant.toJSON())
+      return cb(null, merchant)
     } catch (err) {
       console.log(err)
       return cb(err)
@@ -59,6 +60,17 @@ const merchantService = {
         if (!merchants) return cb(null, '尚未有商家資訊')
         else return cb(null, merchants)
       })
+      .catch(err => cb(err))
+  },
+  deleteMerchant: (req, cb) => {
+    return Merchant.findByPk(req.params.id)
+      .then(merchant => {
+        if (!merchant) throw new Error('找不到此商家')
+        console.log(merchant.userId)
+        if (merchant.userId !== req.user.id) throw new Error('無法刪除他人商家')
+        return merchant.destroy()
+      })
+      .then(deletedMerchant => cb(null, deletedMerchant))
       .catch(err => cb(err))
   }
 }

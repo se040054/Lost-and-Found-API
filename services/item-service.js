@@ -30,7 +30,7 @@ const itemService = {
     try {
       const item = await Item.findByPk(req.params.id)
       if (!item) throw new Error('找不到此物品')
-      if (item.toJSON().userId !== req.user.id) throw new Error('無法修改他人刊登的物品')
+      if (item.userId !== req.user.id) throw new Error('無法修改他人刊登的物品')
       const photo = req.file ? await fileHelper.fileToJpegItem(req.file) : null
       await item.update({
         name: req.body.name || item.name,

@@ -48,7 +48,7 @@ const userService = {
         county: req.body.county || user.county
       })
       await user.save()
-      user = user.toJSON()
+      user = user.toJSON() // 這裡要先轉換才能刪除屬性
       delete user.password
       return cb(null, user)
     }
