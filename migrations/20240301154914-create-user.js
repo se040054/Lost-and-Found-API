@@ -28,7 +28,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       phone: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING // 注意電話是字串 (非運算用途數字)
       },
       county: {
         type: Sequelize.STRING

@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
       },
       phone: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING // 同user phone
       },
       user_id: {
         type: Sequelize.INTEGER,

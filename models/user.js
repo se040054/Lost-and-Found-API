@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     email: DataTypes.STRING,
-    phone: DataTypes.INTEGER,
+    phone: DataTypes.STRING, // 注意電話是字串 (非運算用途數字)
     county: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN
   }, {
