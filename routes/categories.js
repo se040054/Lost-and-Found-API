@@ -9,4 +9,5 @@ router.post('/categories',authenticated,authenticatedAdmin,categoryController.po
 // 管理員驗證前也需要一般登入驗證
 router.put('/categories/:id',authenticated,authenticatedAdmin,categoryController.putCategory)
 router.delete('/categories/:id',authenticated,authenticatedAdmin,categoryController.deleteCategory)
+
 module.exports = router

@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Item, User, Merchant } = require('../models')
 const fileHelper = require('../helpers/file-helper')
 
@@ -68,6 +69,57 @@ const itemService = {
         if (!item) throw new Error('找不到此物品')
         return cb(null, item)
       })
+      .catch(err => cb(err))
+  },
+  getItems: async (req, cb) => {
+    const category = req.query.category || null
+    const search = req.query.search || null
+    const ONE_PAGE_LIMIT = 9
+    const amount = await Item.count({
+      where: {
+        isClaimed: false,
+        ... (category ? { categoryId: category } : {}),
+        ... (search ? {
+          [Op.or]: [
+            { name: { [Op.substring]: `${search}` } },
+            { description: { [Op.substring]: `${search}` } },
+            { place: { [Op.substring]: `${search}` } }
+          ]
+        } : {})
+      }
+    })
+    const totalPage = Math.ceil(amount / ONE_PAGE_LIMIT)
+    const current_page = Math.min(Math.max(req.query.page, 1), totalPage) || 1 //不超過最大值，不小於1，未輸入時預設1
+
+    const items = Item.findAll({
+      where: {
+        isClaimed: false,
+        ... ( category ?{ categoryId:category } : {} ),
+        ... (search ? {
+          [Op.or]: [
+            { name: { [Op.substring]: `${search}` } },
+            { description: { [Op.substring]: `${search}` } },
+            { place: { [Op.substring]: `${search}` } }
+          ]
+        } : {})
+      },
+      offset: ONE_PAGE_LIMIT * (current_page - 1),
+      limit: ONE_PAGE_LIMIT,
+      order: [
+        ['createdAt', 'DESC']
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ['name']
+        },
+        {
+          model: Merchant,
+          attributes: ['name']
+        }
+      ]
+    }, { raw: true })
+      .then(items => cb(null, { items, current_page }))
       .catch(err => cb(err))
   }
 }
