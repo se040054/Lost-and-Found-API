@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       Item.belongsTo(models.Merchant, { foreignKey: 'merchantId' })
       Item.belongsToMany(models.User, {
         through: models.Favorite,
-        foreignKey: 'userId',
+        foreignKey: 'itemId',
         as: 'FavoritedUsers' // 收藏此物品的使用者們
       })
     }
