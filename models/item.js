@@ -10,10 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
       Item.belongsTo(models.Category, { foreignKey: 'categoryId' })
       Item.belongsTo(models.User, { foreignKey: 'userId' })
       Item.belongsTo(models.Merchant, { foreignKey: 'merchantId' })
+      Item.belongsToMany(models.User, {
+        through: models.Favorite,
+        foreignKey: 'userId',
+        as: 'FavoritedUsers' // 收藏此物品的使用者們
+      })
     }
   }
   Item.init({
