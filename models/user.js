@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Merchant, { foreignKey: 'userId' })
       User.hasMany(models.Item, { foreignKey: 'userId' })
+      User.hasMany(models.Comment, { foreignKey: 'userId' })
       User.belongsToMany(models.Item, {
         through: models.Favorite,
         foreignKey: 'userId',

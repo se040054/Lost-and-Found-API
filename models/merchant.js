@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Merchant.belongsTo(models.User, { foreignKey: 'userId' })
-      Merchant.hasMany(models.Item,{foreignKey:'merchantId'})
+      Merchant.hasMany(models.Item, { foreignKey: 'merchantId' })
     }
   }
   Merchant.init({
     name: DataTypes.STRING,
-    logo:DataTypes.STRING,
+    logo: DataTypes.STRING,
     address: DataTypes.STRING,
     phone: DataTypes.STRING,
     userId: DataTypes.INTEGER
