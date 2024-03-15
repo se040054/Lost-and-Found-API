@@ -1,18 +1,19 @@
 'use strict';
 
 const { faker } = require('@faker-js/faker');
+const bcryptjs = require('bcryptjs')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query("ALTER TABLE USERS AUTO_INCREMENT = 1;");
-
+    await queryInterface.sequelize.query("ALTER TABLE USERS AUTO_INCREMENT = 1;")
+    const SALT_LENGTH = 8
     let usersData = []
     for (let i = 1; i < 5; i++) {
       usersData.push({
         id: i,
         account: `user${i}`,
-        password: 123,
+        password: bcryptjs.hashSync('123', SALT_LENGTH),
         name: `user ${i}`,
         avatar: null,
         email: `user${i}@example.com`,
@@ -27,7 +28,7 @@ module.exports = {
       usersData.push({
         id: i,
         account: `user${i}`,
-        password: 123,
+        password: bcryptjs.hashSync('123', SALT_LENGTH),
         name: faker.internet.userName(),
         avatar: 'https://loremflickr.com/200/200/avatar',
         email: faker.internet.email(),
