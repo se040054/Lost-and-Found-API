@@ -13,6 +13,16 @@ const commentService = {
       })
       .then(comment => cb(null, comment))
       .catch(err => cb(err))
+  },
+  deleteComment: (req, cb) => {
+    return Comment.findByPk(req.params.id)
+      .then(comment => {
+        if (!comment) throw new Error('留言不存在')
+        if (comment.userId !== req.user.id ) throw new Error('無法刪除他人的留言')
+        return comment.destroy()
+      })
+      .then(deletedComment => cb(null, deletedComment))
+      .catch(err => cb(err))
   }
 }
 

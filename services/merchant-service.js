@@ -25,8 +25,9 @@ const merchantService = {
   getMerchant: (req, cb) => {
     return Merchant.findByPk(req.params.id, {
       include: [
-        { model: Item },
-        { model: User }]
+        { model: User, attributes: ['name', 'avatar'] },
+        { model: Item }
+      ]
     },
       { raw: true })
       .then(merchant => {

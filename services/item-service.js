@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { Item, User, Merchant } = require('../models')
+const { Item, User, Merchant, Comment } = require('../models')
 const fileHelper = require('../helpers/file-helper')
 
 const itemService = {
@@ -61,8 +61,18 @@ const itemService = {
   getItem: (req, cb) => {
     return Item.findByPk(req.params.id, {
       include: [
-        { model: User },
-        { model: Merchant }
+        { model: User, attributes: ['id', 'name', 'avatar'] },
+        { model: Merchant, attributes: ['id', 'name', 'logo'] },
+        {
+          model: Comment,
+          include: {
+            model: User,
+            attributes: ['id', 'name', 'avatar']
+          }
+        }
+      ],
+      order: [
+        [Comment, 'createdAt', 'DESC']
       ]
     })
       .then(item => {
@@ -94,7 +104,7 @@ const itemService = {
     const items = Item.findAll({
       where: {
         isClaimed: false,
-        ... ( category ?{ categoryId:category } : {} ),
+        ... (category ? { categoryId: category } : {}),
         ... (search ? {
           [Op.or]: [
             { name: { [Op.substring]: `${search}` } },
@@ -111,11 +121,11 @@ const itemService = {
       include: [
         {
           model: User,
-          attributes: ['name']
+          attributes: ['id', 'name', 'avatar']
         },
         {
           model: Merchant,
-          attributes: ['name']
+          attributes: ['id', 'name', 'logo']
         }
       ]
     }, { raw: true })
