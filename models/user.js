@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         as: 'FavoritedItems' // 此使用者收藏的物品們
       })
+      User.hasOne(models.Claim, { foreignKey: 'userId' })
     }
   }
   User.init({

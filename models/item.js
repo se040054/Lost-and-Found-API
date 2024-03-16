@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'FavoritedUsers' // 收藏此物品的使用者們
       })
       Item.hasMany(models.Comment, { foreignKey: 'itemId' })
+      Item.hasOne(models.Claim, { foreignKey: 'itemId' })
     }
   }
   Item.init({

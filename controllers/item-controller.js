@@ -35,6 +35,12 @@ const itemController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  claimItem: (req, res, next) => {
+    itemService.claimItem(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 
 }
