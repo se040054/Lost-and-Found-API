@@ -52,7 +52,14 @@ const userController = {
     if (!req.body.oldPassword || !req.body.newPassword || !req.body.confirmNewPassword) throw new Error('請輸入必要資訊')
     if (req.body.newPassword !== req.body.confirmNewPassword) throw new Error('請密碼不一致')
     if (req.user.id !== Number(req.params.id)) throw new Error('僅能修改當前登入使用者')
-    return userService.putUserPassword(req, (err, apiData) => {
+    userService.putUserPassword(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
+  },
+  googleLogin: (req, res, next) => {
+    if (!req.body.account || !req.body.name || !req.body.email) throw new Error('請重新登入')
+    userService.googleLogin(req, (err, apiData) => {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })

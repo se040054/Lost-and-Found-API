@@ -1,6 +1,8 @@
 const { User, Merchant, Item } = require('.././models')
 const bcrypt = require('bcryptjs')
 const fileHelper = require('../helpers/file-helper')
+const jwt = require('jsonwebtoken')
+
 const userService = {
   register: (req, cb) => {
     const { account, password, name } = req.body
@@ -28,11 +30,11 @@ const userService = {
         { model: Merchant },
         { model: Item }
       ]
-    }
-    ).then(user => {
-      if (!user) throw new Error('此用戶不存在')
-      return cb(null, user)
     })
+      .then(user => {
+        if (!user) throw new Error('此用戶不存在')
+        return cb(null, user)
+      })
       .catch(err => cb(err))
   },
   putUser: async (req, cb) => {
@@ -70,6 +72,30 @@ const userService = {
       await user.update({ password: newPassword })
       await user.save()
       return cb(null, `${user.name} ,修改密碼成功! `) // 只修改密碼，但不返回密碼， 只返回使用者名稱 + 成功資訊
+    } catch (err) {
+      cb(err)
+    }
+  },
+  googleLogin: async (req, cb) => {
+    try {
+      let user = await User.findOne({ where: { email: req.body.email } })
+      if (!user) {
+        const SALT_LENGTH = 8
+        user = await User.create({
+          account: req.body.account,
+          name: req.body.name,
+          email: req.body.email,
+          password: bcrypt.hashSync(Math.random().toString(36).slice(2), SALT_LENGTH) // 隨機產生密碼
+        })
+        await user.reload() // 重新取得新創帳戶完整資訊 否則只會有上述資訊 (非必要)
+      }
+      const userData = user.toJSON() //此時user還是sequelize模型實例 要轉換成JSON物件才可以使用
+      delete userData.password
+      const jwtToken = jwt.sign(userData, process.env.JWT_SECRET_KEY, { expiresIn: '30d' })
+      return cb(null, {
+        user: userData,
+        token: jwtToken
+      })
     } catch (err) {
       cb(err)
     }
