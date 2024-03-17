@@ -23,5 +23,5 @@ router.get('/users/testAdmin', authenticated, authenticatedAdmin, (req, res) => 
 
 router.get('/users/:id', userController.getUser)
 router.put('/users/:id', authenticated, upload.single('avatar'), userController.putUser)
-
+router.put('/users/:id/password',authenticated,userController.putUserPassword)
 module.exports = router

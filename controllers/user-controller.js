@@ -37,13 +37,22 @@ const userController = {
   },
   putUser: (req, res, next) => {
     const { name, email, phone, county } = req.body
-    if (!name && !req.file && !email && !phone && !county ) throw new Error('未修改任何資料')
+    if (!name && !req.file && !email && !phone && !county) throw new Error('未修改任何資料')
     if (req.user.id !== Number(req.params.id)) throw new Error('僅能修改當前登入使用者')
     if (req.body.phone) {
       const phone = Number(req.body.phone)
       if (!Number.isInteger(phone) || req.body.phone.length !== 10) throw new Error('行動電話必須為10位整數')
     }
     userService.putUser(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
+  },
+  putUserPassword: (req, res, next) => {
+    if (!req.body.oldPassword || !req.body.newPassword || !req.body.confirmNewPassword) throw new Error('請輸入必要資訊')
+    if (req.body.newPassword !== req.body.confirmNewPassword) throw new Error('請密碼不一致')
+    if (req.user.id !== Number(req.params.id)) throw new Error('僅能修改當前登入使用者')
+    return userService.putUserPassword(req, (err, apiData) => {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })

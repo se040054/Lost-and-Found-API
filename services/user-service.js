@@ -56,7 +56,23 @@ const userService = {
       console.log(err)
       return cb(err)
     }
-
+  },
+  putUserPassword: async (req, cb) => {
+    try {
+      const user = await User.findByPk(req.user.id)
+      console.log(user.password, req.body.oldPassword)
+      const verify = await bcrypt.compare(req.body.oldPassword, user.password) // 字串在前hash在後
+      const same = await bcrypt.compare(req.body.newPassword, user.password)
+      if (!verify) throw new Error('密碼錯誤')
+      if (same) throw new Error('修改後的密碼與原密碼相同')
+      const SALT_LENGTH = 8
+      const newPassword = await bcrypt.hash(req.body.newPassword, SALT_LENGTH)
+      await user.update({ password: newPassword })
+      await user.save()
+      return cb(null, `${user.name} ,修改密碼成功! `) // 只修改密碼，但不返回密碼， 只返回使用者名稱 + 成功資訊
+    } catch (err) {
+      cb(err)
+    }
   }
 
 }
