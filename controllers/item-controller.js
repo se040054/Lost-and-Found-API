@@ -41,6 +41,12 @@ const itemController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  adminDeleteItem:(req,res,next)=>{
+    itemService.adminDeleteItem(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 
 }

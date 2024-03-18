@@ -13,6 +13,12 @@ const commentController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  adminDeleteComment: (req, res, next) => {
+    commentService.adminDeleteComment(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 }
 module.exports = commentController

@@ -4,9 +4,10 @@ const merchantController = require('../controllers/merchant-controller')
 const { authenticated } = require('../middleware/api-auth')
 const upload = require('../middleware/multer')
 
-router.post('/merchants', authenticated, upload.single('logo'), merchantController.postMerchant)
+
 router.get('/merchants', merchantController.getMerchants)
 router.get('/merchants/:id', merchantController.getMerchant)
+router.post('/merchants', authenticated, upload.single('logo'), merchantController.postMerchant)
 router.put('/merchants/:id', authenticated, upload.single('logo'), merchantController.putMerchant)
 router.delete('/merchants/:id',authenticated,merchantController.deleteMerchant)
 
