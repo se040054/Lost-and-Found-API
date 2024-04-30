@@ -63,6 +63,16 @@ const userController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  },
+  authLogin: (req, res, next) => {
+    return res.json({
+      status: "success",
+    })
+  },
+  authAdmin: (req, res, next) => {
+    return res.json({
+      status: "success",
+    })
   }
 
 }
