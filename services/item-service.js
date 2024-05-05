@@ -84,7 +84,7 @@ const itemService = {
   getItems: async (req, cb) => {
     const category = req.query.category || null
     const search = req.query.search || null
-    const ONE_PAGE_LIMIT = 9
+    const ONE_PAGE_LIMIT = 12
     const amount = await Item.count({
       where: {
         isClaimed: false,

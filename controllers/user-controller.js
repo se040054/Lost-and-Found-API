@@ -19,10 +19,11 @@ const userController = {
     try {
       const userData = req.user.toJSON() //此時req.user還是sequelize模型實例 要轉換成JSON物件才可以使用
       delete userData.password
-      const jwtToken = jwt.sign(userData, process.env.JWT_SECRET_KEY, { expiresIn: '30d' })
+      console.log(userData)
+      const jwtToken = jwt.sign(userData, process.env.JWT_SECRET_KEY, { expiresIn: '120d' })
       return res.json({
         status: 'success',
-        apiData: { jwtToken, user: userData }
+        apiData: { jwtToken, }
       })
     }
     catch (err) {
@@ -64,9 +65,11 @@ const userController = {
       else return res.json({ status: 'success', apiData })
     })
   },
-  authLogin: (req, res, next) => {
+  authToken: (req, res, next) => {
+    console.log(req.user)
     return res.json({
       status: "success",
+      user: req.user
     })
   },
   authAdmin: (req, res, next) => {

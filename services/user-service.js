@@ -100,7 +100,6 @@ const userService = {
       cb(err)
     }
   }
-
 }
 
 module.exports = userService

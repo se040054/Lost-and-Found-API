@@ -8,7 +8,7 @@ const upload = require('../middleware/multer')
 
 
 // 驗證身分
-router.get('/users/authLogin', authenticated, userController.authLogin)
+router.get('/users/authToken', authenticated, userController.authToken)
 router.get('/users/authAdmin', authenticated, authenticatedAdmin, userController.authAdmin)
 // 使用者功能
 router.get('/users/:id', userController.getUser)
