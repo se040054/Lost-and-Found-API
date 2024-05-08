@@ -129,7 +129,7 @@ const itemService = {
         }
       ]
     }, { raw: true })
-      .then(items => cb(null, { items, current_page }))
+      .then(items => cb(null, { items, current_page, totalPage }))
       .catch(err => cb(err))
   },
   claimItem: async (req, cb) => {

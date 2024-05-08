@@ -11,7 +11,7 @@ module.exports = {
       merchantData.push({
         id: i,
         name: faker.company.name(),
-        logo: 'https://loremflickr.com/200/200/avatar',
+        logo: `https://loremflickr.com/200/200/trademark?random=${i}`,
         address: faker.location.streetAddress(),
         phone: faker.string.numeric(9),
         user_id: Math.ceil(i / 5),
