@@ -52,7 +52,10 @@ const userService = {
       await user.save()
       user = user.toJSON() // 這裡要先轉換才能刪除屬性
       delete user.password
-      return cb(null, user)
+     
+
+      const jwtToken = jwt.sign(user, process.env.JWT_SECRET_KEY, { expiresIn: '120d' })
+      return cb(null, {user,jwtToken})
     }
     catch (err) {
       console.log(err)
