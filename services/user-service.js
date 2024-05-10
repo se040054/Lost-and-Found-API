@@ -68,7 +68,7 @@ const userService = {
       console.log(user.password, req.body.oldPassword)
       const verify = await bcrypt.compare(req.body.oldPassword, user.password) // 字串在前hash在後
       const same = await bcrypt.compare(req.body.newPassword, user.password)
-      if (!verify) throw new Error('密碼錯誤')
+      if (!verify) throw new Error('原密碼錯誤')
       if (same) throw new Error('修改後的密碼與原密碼相同')
       const SALT_LENGTH = 8
       const newPassword = await bcrypt.hash(req.body.newPassword, SALT_LENGTH)

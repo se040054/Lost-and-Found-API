@@ -13,7 +13,7 @@ module.exports = {
       usersData.push({
         id: i,
         account: `user${i}`,
-        password: bcryptjs.hashSync('123', SALT_LENGTH),
+        password: bcryptjs.hashSync('asd123', SALT_LENGTH),
         name: `user ${i}`,
         avatar: null,
         email: `user${i}@example.com`,
@@ -28,7 +28,7 @@ module.exports = {
       usersData.push({
         id: i,
         account: `user${i}`,
-        password: bcryptjs.hashSync('123', SALT_LENGTH),
+        password: bcryptjs.hashSync('asd123', SALT_LENGTH),
         name: faker.internet.userName(),
         avatar: `https://loremflickr.com/200/200/avatar?random=${i}`,
         email: faker.internet.email(),
