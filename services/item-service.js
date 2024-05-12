@@ -101,7 +101,7 @@ const itemService = {
     const totalPage = Math.ceil(amount / ONE_PAGE_LIMIT)
     const current_page = Math.min(Math.max(req.query.page, 1), totalPage) || 1 //不超過最大值，不小於1，未輸入時預設1
 
-    const items = Item.findAll({
+    Item.findAll({
       where: {
         isClaimed: false,
         ... (category ? { categoryId: category } : {}),
@@ -112,6 +112,13 @@ const itemService = {
             { place: { [Op.substring]: `${search}` } }
           ]
         } : {})
+      },
+      attributes: {
+        // 添加一行 評論數量的欄位
+        include: [
+          // 計算Comments的關聯item_id有幾個Comment 結果 
+          [sequelize.literal('(SELECT COUNT(*) FROM Comments WHERE Comments.item_id = Item.id)'), 'commentAmount']
+        ]
       },
       offset: ONE_PAGE_LIMIT * (current_page - 1),
       limit: ONE_PAGE_LIMIT,
@@ -126,6 +133,10 @@ const itemService = {
         {
           model: Merchant,
           attributes: ['id', 'name', 'logo']
+        },
+        {
+          model: Comment,
+          attributes: []
         }
       ]
     }, { raw: true })
@@ -152,7 +163,7 @@ const itemService = {
       cb(err)
     }
   },
-  adminDeleteItem:(req,cb)=>{
+  adminDeleteItem: (req, cb) => {
     return Item.findByPk(req.params.id)
       .then(item => {
         if (!item) throw new Error('找不到此物品')
