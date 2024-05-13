@@ -17,7 +17,7 @@ const itemService = {
         place: req.body.place,
         findDate: req.body.findDate,
         photo: photo || null,
-        categoryId: req.body.category || null, // 選填欄位都會有null
+        categoryId: req.body.categoryId|| null, // 選填欄位都會有null
         userId: req.user.id,
         merchantId: req.body.merchantId || null
       })
