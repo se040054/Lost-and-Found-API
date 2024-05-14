@@ -10,7 +10,7 @@ const itemService = {
         if (!merchant) throw new Error('找不到此商家')
         if (merchant.userId !== req.user.id) throw new Error('此商家並非此登錄者所有')
       }
-      const photo = req.file ? await fileHelper.fileToJpegUser(req.file) : null
+      const photo = req.file ? await fileHelper.fileToJpegItem(req.file) : null
       const newItem = await Item.create({
         name: req.body.name,
         description: req.body.description || null,
