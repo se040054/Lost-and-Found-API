@@ -17,7 +17,7 @@ const itemService = {
         place: req.body.place,
         findDate: req.body.findDate,
         photo: photo || null,
-        categoryId: req.body.categoryId|| null, // 選填欄位都會有null
+        categoryId: req.body.categoryId || null, // 選填欄位都會有null
         userId: req.user.id,
         merchantId: req.body.merchantId || null
       })
@@ -39,7 +39,7 @@ const itemService = {
         place: req.body.place || item.place,
         findDate: req.body.findDate || item.findDate,
         photo: photo || item.photo,
-        categoryId: req.body.category || item.categoryId // 注意這裡要轉換
+        categoryId: req.body.categoryId || item.categoryId
       })
       await item.save()
       return cb(null, item)
