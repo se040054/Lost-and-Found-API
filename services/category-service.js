@@ -5,6 +5,15 @@ const categoryService = {
       .then(categories => cb(null, categories))
       .catch(err => cb(err))
   },
+  getCategory: (req, cb) => {
+    const categoryId = req.params.id
+    return Category.findByPk(categoryId)
+      .then(category => {
+        if (!category) throw new Error('找不到此分類')
+        cb(null, category)
+      })
+      .catch(err => cb(err))
+  },
   postCategory: (req, cb) => {
     return Category.findOne({ where: { name: req.body.name } })
       .then(repeatCategory => {
