@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Claim, Item, sequelize } = require('../models')
 const claimService = {
   postClaim: async (req, cb) => {
@@ -13,7 +14,7 @@ const claimService = {
           itemId, userId
         }
       })
-      if (repeatClaim) throw new Error('已申請過認領')
+      if (repeatClaim?.isApproved === null) throw new Error('已申請過認領')
       const claim = await Claim.create({ itemId, userId, isApproved: null })
       cb(null, claim)
     } catch (err) {
@@ -24,7 +25,10 @@ const claimService = {
   getClaimSubmitted: async (req, cb) => {
     try {
       const userId = req.user.id
-      const claims = await Claim.findAll({ where: { userId } })
+      const claims = await Claim.findAll({
+        include: { model: Item },
+        where: { userId }
+      })
       cb(null, claims)
     } catch (err) {
       console.log(err)
@@ -60,9 +64,27 @@ const claimService = {
       if (!item) throw new Error('物品不存在')
       if (item.isClaimed) throw new Error('此物品已被認領')
       // 這邊的錯誤返回為了訊息的正確性( 應該先返回是否為刊登本人 才能查看認領情形 所以改動了錯誤順序 但可能浪費效能)
+      // 下面是將修改認領的物品資料
       const claimedItem = await item.update({
         isClaimed: req.body.action
       }, { transaction: t })
+      // 並且如果認領成功 將其他對此物品但非認領者的認領回絕
+      // 注意action 是JSON ，會解析為字串而不是布林，這邊小心不要當成布林用
+      if (req.body.action === 'true') {
+        await Claim.update({
+          isApproved: false
+        }, {
+          where: {
+            // 將其他claim 同一物品，不同申請人的認領要求全部拒絕
+            itemId: claim.itemId,
+            userId: {
+              [Op.not]: claim.userId
+            }
+          }
+        }, { transaction: t })
+      }
+      // 下面是將修改認領資料
+      // 此為修改作法， 原先作法將此行為放置第一，推測會導致所有Claim的更新與此衝突，將此操作順序放在後面則能成功執行
       const approvedClaim = await claim.update({
         isApproved: req.body.action
       }, { transaction: t })
