@@ -7,7 +7,7 @@ const items = require('./items')
 const categories = require('./categories')
 const favorites = require('./favorites')
 const comments =require('./comments')
-
+const claims = require('./claims')
 const { errorHandler } = require('../middleware/error-handler')
 
 router.use(users)
@@ -16,7 +16,7 @@ router.use(items)
 router.use(categories)
 router.use(favorites)
 router.use(comments)
-
+router.use(claims)
 router.use(errorHandler)
 
 module.exports = router

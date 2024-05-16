@@ -15,6 +15,9 @@ module.exports = {
       item_id: {
         type: Sequelize.INTEGER
       },
+      is_approved:{
+        type:Sequelize.BOOLEAN
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

@@ -11,17 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Claim.belongsTo(models.User,{foreignKey:'userId'})
-      Claim.belongsTo(models.Item,{foreignKey:'itemId'})
+      Claim.belongsTo(models.User, { foreignKey: 'userId' })
+      Claim.belongsTo(models.Item, { foreignKey: 'itemId' })
     }
   }
   Claim.init({
     userId: DataTypes.INTEGER,
-    itemId: DataTypes.INTEGER
+    itemId: DataTypes.INTEGER,
+    isApproved: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Claim',
-    tableName:'Claims',
+    tableName: 'Claims',
     underscored: true,
   });
   return Claim;
