@@ -143,26 +143,6 @@ const itemService = {
       .then(items => cb(null, { items, current_page, totalPage }))
       .catch(err => cb(err))
   },
-  claimItem: async (req, cb) => {
-    const t = await sequelize.transaction()
-    try {
-      const item = await Item.findByPk(req.params.id)
-      if (!item) throw new Error('物品不存在')
-      if (item.isClaimed) throw new Error('物品已被認領')
-      if (item.userId === req.user.id) throw new Error('不能認領自己刊登的物品，請使用刪除')
-      const claimedItem = await item.update({
-        isClaimed: true
-      }, { transaction: t })
-      const claim = await Claim.create({
-        itemId: req.params.id,
-        userId: req.user.id
-      }, { transaction: t })
-      await t.commit()
-      return cb(null, { item: claimedItem, claim })
-    } catch (err) {
-      cb(err)
-    }
-  },
   adminDeleteItem: (req, cb) => {
     return Item.findByPk(req.params.id)
       .then(item => {
