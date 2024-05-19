@@ -24,6 +24,12 @@ const claimController = {
       else return res.json({ status: 'success', apiData })
     })
   },
+  getClaim: (req, res, next) => {
+    claimService.getClaim(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
+  }
 }
 
 module.exports = claimController

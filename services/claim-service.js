@@ -95,6 +95,17 @@ const claimService = {
       console.log(err)
       cb(err)
     }
+  },
+  getClaim: async (req, cb) => {
+    return Claim.findOne({
+      where: {
+        itemId: req.params.itemId,
+        userId: req.user.id
+      }
+    }).then(claim => {
+      return cb(null, claim)
+      // 這邊目前不需要檢驗不存在，因為大部分物品為未申請認領狀態
+    }).catch(err => cb(err))
   }
 }
 module.exports = claimService
