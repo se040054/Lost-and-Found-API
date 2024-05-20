@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { Claim, Item, sequelize } = require('../models')
+const { Claim, Item, User, sequelize } = require('../models')
 const claimService = {
   postClaim: async (req, cb) => {
     const itemId = req.params.itemId
@@ -28,6 +28,8 @@ const claimService = {
       const claims = await Claim.findAll({
         include: { model: Item },
         where: { userId }
+        ,
+        order: [['createdAt', 'DESC']]
       })
       cb(null, claims)
     } catch (err) {
@@ -40,12 +42,14 @@ const claimService = {
     try {
       const userId = req.user.id
       const claims = await Claim.findAll({
-        include: {
+        include: [{
           model: Item,
           where: {
             userId
           }
-        }
+        },
+        { model: User }],
+        order: [['createdAt', 'DESC']]
       })
       cb(null, claims)
     } catch (err) {
