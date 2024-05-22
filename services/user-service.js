@@ -52,10 +52,10 @@ const userService = {
       await user.save()
       user = user.toJSON() // 這裡要先轉換才能刪除屬性
       delete user.password
-     
+
 
       const jwtToken = jwt.sign(user, process.env.JWT_SECRET_KEY, { expiresIn: '120d' })
-      return cb(null, {user,jwtToken})
+      return cb(null, { user, jwtToken })
     }
     catch (err) {
       console.log(err)
@@ -85,11 +85,12 @@ const userService = {
       if (!user) {
         const SALT_LENGTH = 8
         user = await User.create({
-          account: req.body.account,
+          account: bcrypt.hashSync(Math.random().toString(36).slice(2), SALT_LENGTH), // 隨機產生帳戶,
           name: req.body.name,
           email: req.body.email,
           password: bcrypt.hashSync(Math.random().toString(36).slice(2), SALT_LENGTH) // 隨機產生密碼
         })
+        await user.update({ avatar: req.body.avatar || null }) // 目前先將google頭貼修改功能放在後端
         await user.reload() // 重新取得新創帳戶完整資訊 否則只會有上述資訊 (非必要)
       }
       const userData = user.toJSON() //此時user還是sequelize模型實例 要轉換成JSON物件才可以使用

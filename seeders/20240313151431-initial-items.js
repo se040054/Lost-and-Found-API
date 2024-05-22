@@ -14,7 +14,7 @@ module.exports = {
         description: faker.commerce.productDescription(),
         place: faker.location.street(),
         find_date: faker.date.past({ years: 1 }),
-        photo: `https://loremflickr.com/600/300/belongings?random=${i}`,
+        photo: `https://loremflickr.com/650/430/belongings?random=${i}`,
         is_claimed: false,
         category_id: Math.ceil(Math.random() * 7),
         user_id: Math.ceil(i / 10),

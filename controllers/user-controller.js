@@ -59,7 +59,7 @@ const userController = {
     })
   },
   googleLogin: (req, res, next) => {
-    if (!req.body.account || !req.body.name || !req.body.email) throw new Error('請重新登入')
+    if (!req.body.name || !req.body.email) throw new Error('資訊遺失，請重新登入') // 先不把頭貼做成必填
     userService.googleLogin(req, (err, apiData) => {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
