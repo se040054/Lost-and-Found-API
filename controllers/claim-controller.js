@@ -29,7 +29,11 @@ const claimController = {
       if (err) return next(err)
       else return res.json({ status: 'success', apiData })
     })
+  }, deleteClaim: (req, res, next) => {
+    claimService.deleteClaim(req, (err, apiData) => {
+      if (err) return next(err)
+      else return res.json({ status: 'success', apiData })
+    })
   }
 }
-
 module.exports = claimController

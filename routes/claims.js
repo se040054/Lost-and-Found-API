@@ -10,6 +10,6 @@ router.get('/claims/received', authenticated, claimController.getClaimReceived)
 router.post('/claims/:itemId', authenticated, claimController.postClaim)
 router.get('/claims/:itemId', authenticated, claimController.getClaim)
 router.put('/claims/:id', authenticated, claimController.putClaim)
-
+router.delete('/claims/:id' , authenticated , claimController.deleteClaim)
 
 module.exports = router

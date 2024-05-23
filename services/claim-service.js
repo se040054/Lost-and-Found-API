@@ -19,7 +19,7 @@ const claimService = {
       cb(null, claim)
     } catch (err) {
       console.log(err)
-      cb(err)
+      return cb(err)
     }
   },
   getClaimSubmitted: async (req, cb) => {
@@ -34,7 +34,7 @@ const claimService = {
       cb(null, claims)
     } catch (err) {
       console.log(err)
-      cb(err)
+      return cb(err)
 
     }
   },
@@ -54,7 +54,7 @@ const claimService = {
       cb(null, claims)
     } catch (err) {
       console.log(err)
-      cb(err)
+      return cb(err)
     }
   },
   putClaim: async (req, cb) => {
@@ -88,7 +88,7 @@ const claimService = {
         }, { transaction: t })
       }
       // 下面是將修改認領資料
-      // 此為修改作法， 原先作法將此行為放置第一，推測會導致所有Claim的更新與此衝突，將此操作順序放在後面則能成功執行
+      // 原先作法將此行為放置第一，推測會導致所有Claim的更新與此衝突，將此操作順序放在後面則能成功執行
       const approvedClaim = await claim.update({
         isApproved: req.body.action
       }, { transaction: t })
@@ -97,7 +97,7 @@ const claimService = {
     } catch (err) {
       await t.rollback() // 在發生錯誤時取消交易
       console.log(err)
-      cb(err)
+      return cb(err)
     }
   },
   getClaim: async (req, cb) => {
@@ -109,7 +109,25 @@ const claimService = {
     }).then(claim => {
       return cb(null, claim)
       // 這邊目前不需要檢驗不存在，因為大部分物品為未申請認領狀態
-    }).catch(err => cb(err))
+    }).catch(err => {
+      console.log(err)
+      return cb(err)
+    }
+    )
+  },
+  deleteClaim: async (req, cb) => {
+    return Claim.findByPk(req.params.id).then(claim => {
+      if (!claim) throw new Error('沒有此申請')
+      console.log(claim)
+      if (claim.userId !== req.user.id) throw new Error('無法刪除他人申請')
+      if (claim.isApproved !== null) throw new Error('已回應的認領無法刪除')
+      return claim.destroy()
+    }).then(deletedClaim => cb(null, deletedClaim))
+      .catch(err => {
+        console.log(err)
+        return cb(err)
+      }
+      )
   }
 }
 module.exports = claimService
