@@ -40,11 +40,22 @@ const userService = {
   putUser: async (req, cb) => {
     try {
       let user = await User.findByPk(req.params.id)
-      const avatar = req.file ? await fileHelper.fileToJpegUser(req.file) : null
+      // const avatar = req.file ? await fileHelper.fileToJpegUser(req.file) : null
+      let path;
+      if (req.file) {
+        const photo = req.file
+        if (!photo.mimetype.startsWith('image')) {
+          throw new Error('圖片格式不正確');
+        }
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        console.log("大小" + photo.size)
+        if (photo.size > maxSize) throw new Error('圖片太大了');
+        path = `${process.env.LOCAL_URL}/temp/${photo.filename}`
+      }
       if (!user) throw new Error('使用者不存在!')
       await user.update({
         name: req.body.name || user.name,
-        avatar: avatar || user.avatar,
+        avatar: path || user.avatar,
         email: req.body.email || user.email,
         phone: req.body.phone || user.phone,
         county: req.body.county || user.county

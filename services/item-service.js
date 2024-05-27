@@ -10,13 +10,24 @@ const itemService = {
         if (!merchant) throw new Error('找不到此商家')
         if (merchant.userId !== req.user.id) throw new Error('此商家並非此登錄者所有')
       }
-      const photo = req.file ? await fileHelper.fileToJpegItem(req.file) : null
+      // const photo = req.file ? await fileHelper.fileToJpegItem(req.file) : null
+      let path;
+      if (req.file) {
+        const photo = req.file
+        if (!photo.mimetype.startsWith('image')) {
+          throw new Error('圖片格式不正確');
+        }
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        console.log("大小" + photo.size)
+        if (photo.size > maxSize) throw new Error('圖片太大了');
+        path = `${process.env.LOCAL_URL}/temp/${photo.filename}`
+      }
       const newItem = await Item.create({
         name: req.body.name,
         description: req.body.description || null,
         place: req.body.place,
         findDate: req.body.findDate,
-        photo: photo || null,
+        photo: path || null,
         categoryId: req.body.categoryId || null, // 選填欄位都會有null
         userId: req.user.id,
         merchantId: req.body.merchantId || null
@@ -32,13 +43,24 @@ const itemService = {
       const item = await Item.findByPk(req.params.id)
       if (!item) throw new Error('找不到此物品')
       if (item.userId !== req.user.id) throw new Error('無法修改他人刊登的物品')
-      const photo = req.file ? await fileHelper.fileToJpegItem(req.file) : null
+      // const photo = req.file ? await fileHelper.fileToJpegItem(req.file) : null
+      let path;
+      if (req.file) {
+        const photo = req.file
+        if (!photo.mimetype.startsWith('image')) {
+          throw new Error('圖片格式不正確');
+        }
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        console.log("大小" + photo.size)
+        if (photo.size > maxSize) throw new Error('圖片太大了');
+        path = `${process.env.LOCAL_URL}/temp/${photo.filename}`
+      }
       await item.update({
         name: req.body.name || item.name,
         description: req.body.description || item.description,
         place: req.body.place || item.place,
         findDate: req.body.findDate || item.findDate,
-        photo: photo || item.photo,
+        photo: path || item.photo,
         categoryId: req.body.categoryId || item.categoryId
       })
       await item.save()
